@@ -7,18 +7,10 @@ Documentation for Farmland Tycoon
 =================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
-
-Main
-==========
-.. automodule:: main
-   :members:
-
-Helper: GUI
-==========
-.. automodule:: helpers.gui
-   :members
+   
+   documentation
 
 Indices and tables
 ==================
