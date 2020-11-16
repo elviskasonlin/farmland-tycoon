@@ -1,7 +1,6 @@
-# CDT 1D Project Game
-___
+# Farmland Tycoon
 
-For 10.014 Computational Thinking for Design
+For 10.014 Computational Thinking for Design, 1D Project
 
 Created by\
 *in order of increasing student ID number*
@@ -9,11 +8,13 @@ Created by\
 1004210 Pyae Phyo Aung @ Elvis Kason Lin\
 1005262 Kevin Teng Jin Peng\
 1005275 Lin Lin\
-1005477 Theresa Lam Zouh Ling\
+1005477 Theresa Lam Zouh Ling
 
-Freshmore, Class of 2024
+Freshmore, Class of 2024, Singapore University Technology and Design
 
 # About
+Farmland Tycoon is a farming simulator created in python.
+...
 
 # Setting up development environment
 
