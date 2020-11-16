@@ -3,12 +3,13 @@ ___
 
 For 10.014 Computational Thinking for Design
 
-Created by
+Created by\
 *in order of increasing student ID number*
-1004210 Pyae Phyo Aung @ Elvis Kason Lin
-1005262 Kevin Teng Jin Peng
-1005275 Lin Lin
-1005477 Theresa Lam Zouh Ling
+
+1004210 Pyae Phyo Aung @ Elvis Kason Lin\
+1005262 Kevin Teng Jin Peng\
+1005275 Lin Lin\
+1005477 Theresa Lam Zouh Ling\
 
 Freshmore, Class of 2024
 
@@ -17,8 +18,8 @@ Freshmore, Class of 2024
 # Setting up development environment
 
 1. (Optional) Install `pyenv` and `virtualenv`
-  * `pyenv` to manage your python versions
-  * `virtualenv` to enable python virtual environments
+  - `pyenv` to manage your python versions
+  - `virtualenv` to enable python virtual environments
 2. Install `pipenv` to manage per-project dependencies
 3. Run `pipenv install --dev` to install development dependencies
 4. Run `pipenv shell` to enter into the `pipenv` environment
