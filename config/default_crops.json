@@ -1,0 +1,27 @@
+{
+    "corn": {
+        "time": 80,
+        "cost": 60,
+        "weather": "normal"
+    },
+    "apple": {
+        "time": 90,
+        "cost": 65,
+        "weather": "cold"
+    },
+    "cotton": {
+        "time": 60,
+        "cost": 50,
+        "weather": "hot"
+    },
+    "peanuts": {
+        "time": 70,
+        "cost": 20,
+        "weather": "cold"
+    },
+    "pineapple": {
+        "time": 1000,
+        "cost": 20,
+        "weather": "hot"
+    }
+}

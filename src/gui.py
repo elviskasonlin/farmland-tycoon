@@ -5,11 +5,18 @@ Helper functions for displaying the user interface
 """
 
 def display():
-    """Displays the user-interface"""
+    """
+    Displays the user-interface on a 64x64 grid
+    """
+
+    
+
     pass
 
 def main_menu():
-    """The string of main menu"""
+    """
+    Main menu with 
+    """
     
     output = """
     Main Menu

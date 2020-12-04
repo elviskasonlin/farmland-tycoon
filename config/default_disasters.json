@@ -1,0 +1,33 @@
+{
+    "disasters": {
+        "drought": {
+            "cost_type": "destruction",
+            "cost": {
+                "cost_lower": 0.4,
+                "cost_upper": 0.6
+            },
+            "chance": 0.05
+        },
+        "pdrought": {
+            "cost_type": "destruction",
+            "cost": {
+                "cost_lower": 0.6,
+                "cost_upper": 1.0
+            },
+            "chance": 0.01
+        },
+        "fire": {
+            "cost_type": "destruction",
+            "cost": {
+                "cost_lower": 0.1,
+                "cost_upper": 0.2
+            },
+            "chance": 0.09
+        },
+        "heateave": {
+            "cost_type": "maintenance",
+            "cost": 50,
+            "chance": 0.07
+        }
+    }
+}

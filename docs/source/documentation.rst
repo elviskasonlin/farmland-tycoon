@@ -5,27 +5,25 @@ Main
 
 Helper: Auxiliary Functions
 ======
-.. automodule:: helpers.auxfn
+.. automodule:: src.auxfn
+   :members:
+
+Helper: Game
+===========
+.. automodule:: src.game
    :members:
 
 Helper: GUI
-===========
-.. automodule:: helpers.gui
-   :members:
-
-Helper: Data
 ============
-.. automodule:: helpers.data
+.. automodule:: src.gui
    :members:
 
 Helper: Game load/save
 ======================
-.. automodule:: helpers.gload
-   :members:
-.. automodule:: helpers.gsave
+.. automodule:: src.save
    :members:
 
 Helper: Market
 ==============
-.. automodule:: helpers.market
+.. automodule:: src.market
    :members:

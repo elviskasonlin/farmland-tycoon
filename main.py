@@ -5,8 +5,7 @@ The main file for the game
 """
 
 import sys
-import helpers.gui, helpers.data, helpers.market, helpers.auxfn
-import helpers.gload, helpers.gsave
+import src.gui, src.game, src.market, src.auxfn, src.save
 
 def game():
     """Starts the game"""
@@ -29,7 +28,7 @@ def main():
 
     menu_choice = -1
     while (menu_choice != 0):
-        menu_choice = helpers.auxfn.get_user_choice(helpers.gui.main_menu(), "int")
+        menu_choice = src.auxfn.get_user_choice(src.gui.main_menu(), "int")
 
         if (menu_choice == 1):
             game()

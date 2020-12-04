@@ -16,7 +16,7 @@ def get_user_choice(display_text, return_type):
         * user_input (`str`, `bool`, `int`, `float`): The user's input converted to the target type as specified in `return_type`
     """
 
-    buffer = input(display_text)
+    buffer = in  put(display_text)
     output = None
 
     try:
