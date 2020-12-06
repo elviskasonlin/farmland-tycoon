@@ -5,7 +5,11 @@ The main file for the game
 """
 
 import sys
-import src.gui, src.game, src.market, src.auxfn, src.save
+import src.auxfn as AUXFN
+import src.gui as GUI
+import src.game as GAME
+import src.market as MARKET
+import src.save as SAVE
 
 def game():
     """Starts the game"""
@@ -28,7 +32,7 @@ def main():
 
     menu_choice = -1
     while (menu_choice != 0):
-        menu_choice = src.auxfn.get_user_choice(src.gui.main_menu(), "int")
+        menu_choice = AUXFN.get_user_choice(GUI.main_menu(), "int")
 
         if (menu_choice == 1):
             game()
@@ -40,7 +44,7 @@ def main():
             #load_game()
             menu_choice = -1
         elif (menu_choice == 4):
-            #settings()
+            settings()
             menu_choice = -1
         else:
             pass

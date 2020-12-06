@@ -4,14 +4,38 @@ gui.py
 Helper functions for displaying the user interface
 """
 
-def display():
+class Display(object):
     """
-    Displays the user-interface on a 64x64 grid
+    docstring
     """
 
+    display_height = 0
+    display_width = 0
+    display_buffer = None
+
+    def __init__(self, displayHeight, displayWidth):
+        self.display_height = displayHeight
+        self.display_width = displayWidth
+        self.display_buffer = [[""] * self.display_height for i in range(self.display_height)]
+
+    def show(self):
+        """
+        Displays the user-interface on a 64x64 grid
+        """
+        print(self.display_buffer)
+        pass
     
+    def update(self, *args):
+        """
+        Updates the data
+        """
+        pass
 
-    pass
+    def show_help(self):
+        """
+        Shows help
+        """
+        pass
 
 def main_menu():
     """
@@ -31,3 +55,4 @@ def main_menu():
     """
 
     return output
+

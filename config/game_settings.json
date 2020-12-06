@@ -1,0 +1,7 @@
+{
+    "initial_conditions": {
+        "money": 1000000,
+        "labour": 1,
+        "plot": [[],[],[]]
+    }
+}
