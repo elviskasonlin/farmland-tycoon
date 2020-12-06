@@ -4,7 +4,7 @@ game.py
 Game class
 """
 
-class game(object):
+class Game(object):
     """
     Main game class
     """
@@ -15,5 +15,8 @@ class game(object):
     def __init__(self):
         pass
 
-    def new_game(self, mode):
+    def set_game_state(self):
+        pass
+
+    def get_game_state(self):
         pass

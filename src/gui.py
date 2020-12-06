@@ -1,42 +1,57 @@
 """
 gui.py
 
-Helper functions for displaying the user interface
+Helper items for displaying UI elements
 """
 
-class Display(object):
+# Board Object
+class Board(object):
     """
     docstring
     """
 
-    display_height = 0
-    display_width = 0
+    board_height = 0
+    board_width = 0
     display_buffer = None
 
-    def __init__(self, displayHeight, displayWidth):
-        self.display_height = displayHeight
-        self.display_width = displayWidth
-        self.display_buffer = [[""] * self.display_height for i in range(self.display_height)]
+    def __init__(self, boardHeight, boardWidth):
+        self.board_height = boardHeight
+        self.board_width = boardWidth
+        self.display_buffer = [[""] * self.board_width for i in range(self.board_height)]
 
-    def show(self):
+    def get_board_height(self):
         """
-        Displays the user-interface on a 64x64 grid
+        Returns the set board_height
+
+        Returns:
+            * board_height (`int`)
         """
+        return self.board_height
+
+    def get_board_width(self):
+        """
+        Returns the set board_width
+
+        Returns:
+            * board_width (`int`)
+        """
+        return self.board_width
+
+    def show_board(self):
+        """
+        Displays the board with its current state
+        """
+        # For debugging
         print(self.display_buffer)
-        pass
+        return None
     
-    def update(self, *args):
+    def update_board(self, *args):
         """
         Updates the data
         """
         pass
 
-    def show_help(self):
-        """
-        Shows help
-        """
-        pass
-
+# The string for main menu
 def main_menu():
     """
     Main menu with 
