@@ -19,6 +19,7 @@ class Board(object):
         self.board_width = boardWidth
         self.display_buffer = [[""] * self.board_width for i in range(self.board_height)]
 
+    # Getters
     def get_board_height(self):
         """
         Returns the set board_height
@@ -44,7 +45,8 @@ class Board(object):
         # For debugging
         print(self.display_buffer)
         return None
-    
+
+    # Setters    
     def update_board(self, *args):
         """
         Updates the data
@@ -54,16 +56,14 @@ class Board(object):
 # The string for main menu
 def main_menu():
     """
-    Main menu with 
+    The main menu (upon start) 
     """
     
     output = """
     Main Menu
     ---------
     [1] Start\n
-    [2] Create New Game\n
-    [3] Load Game\n
-    [4] Settings\n
+    [2] Settings\n
     [0] Quit\n
 
     Enter your choice: 
@@ -71,3 +71,67 @@ def main_menu():
 
     return output
 
+def start_menu():
+    """
+    The main menu (upon start) 
+    """
+    
+    output = """
+    Start
+    -----
+    [1] New Game\n
+    [2] Load Game\n
+    [0] Back\n
+
+    Enter your choice: 
+    """
+
+    return output
+
+def settings_menu():
+    """
+    Settings menu
+    """
+
+    output = """
+    Settings
+    --------
+    Nil\n
+    """
+    return output
+
+def game_menu():
+    """
+    The game menu during gameplay
+    """
+
+    output = """
+    Game Menu
+    ---------
+    Nil\n
+    """
+    return output
+
+def help_menu():
+    """
+    Shows the help menu
+    """
+
+    output = """
+    Help Menu
+    ---------
+    Nil\n
+    """
+    return output
+
+def upgrades_menu():
+    """
+    Shows the upgrades menu
+    """
+
+    output = """
+    Help Menu
+    ---------
+    Nil\n
+    """
+    return output

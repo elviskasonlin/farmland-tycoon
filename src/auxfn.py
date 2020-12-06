@@ -4,7 +4,7 @@ auxfn.py
 Auxilliary functions
 """
 
-def get_user_choice(displayText, returnType):
+def get_user_choice(displayText: str, returnType: str):
     """
     Gets the user's choice using input()
 
@@ -33,3 +33,17 @@ def get_user_choice(displayText, returnType):
         pass
 
     return output
+
+
+def settings():
+    """
+    Sets game settings
+
+    Args:
+        * None
+    
+    Returns:
+        * None
+    """
+    print("settings() called. Settings to be set.")
+    pass

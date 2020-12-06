@@ -1,7 +1,7 @@
 """
 Main.py
 
-The main file for the game
+The main entry point for the game
 """
 
 import sys
@@ -9,61 +9,83 @@ import src.auxfn as AUXFN
 import src.gui as GUI
 import src.game as GAME
 import src.market as MARKET
-import src.save as SAVE
 
-def game():
-    """Starts the game"""
-    print("game() called. Game has started.")
+def start_game_loop(Game: object):
+    """
+    The main game loop.
+
+    Args:
+        * Game (`object`): The Game object as declared in main.start()
+
+    Returns:
+        * None
+    """
+
+    print("Game started")
     pass
 
-def new_game():
-    """Creates a new game instance"""
-    print("new_game() called. New game has been created.")
-    pass
+def start():
+    """
+    Shows the start game menu and starts the game if a game state is loaded.
 
-def load_game():
-    """Loads a game"""
-    print("load_game() called")
-    file_name = input("Enter the file name of your save: ")
+    Args:
+        * None
+
+    Returns:
+        * None
+    """
+
+    # Create a Game Object
+    Game = GAME.Game()
     
-    save_data = SAVE.load_game(fileName=file_name)
-    print(save_data)
+    def determine_menu_choice():
+        if (Game.get_start_flag() == True):
+            return 0
+        else:
+            return  -1
 
-def save_game():
-    """DEBUG ONLY. Saves game"""
-    print("save_game() called")
-    file_name = input("Enter a name for your save: ")
-    SAVE.save_game(fileName=file_name, gameState={"Key": "Value"})
-
-def settings():
-    """Sets game settings"""
-    print("settings() called. Settings to be set.")
-    pass
+    menu_choice = -1
+    while (menu_choice != 0):
+        menu_choice = AUXFN.get_user_choice(displayText=GUI.start_menu(), returnType="int")
+        if (menu_choice == 1):
+            Game.create_new_game()
+            menu_choice = determine_menu_choice()
+        elif (menu_choice == 2):
+            Game.load_game()
+            menu_choice = determine_menu_choice()
+        elif (menu_choice == 3):
+            Game.save_game()
+            menu_choice = determine_menu_choice()
+        else:
+            pass
+    
+    # Start the game loop
+    if (Game.get_start_flag() == True):
+        start_game_loop(Game=Game)
+    
+    return
 
 def main():
-    """Main entry point"""
+    """
+    Main entry point for the program
+    """
 
     menu_choice = -1
     while (menu_choice != 0):
         menu_choice = AUXFN.get_user_choice(displayText=GUI.main_menu(), returnType="int")
 
         if (menu_choice == 1):
-            game()
+            # Start game
+            start()
             menu_choice = -1
         elif (menu_choice == 2):
-            new_game()
-            menu_choice = -1
-        elif (menu_choice == 3):
-            load_game()
-            menu_choice = -1
-        elif (menu_choice == 4):
-            settings()
-            menu_choice = -1
-        elif (menu_choice == 5):
-            save_game()
+            # Settings
+            AUXFN.settings()
             menu_choice = -1
         else:
             pass
+
+    return
 
 if __name__ == "__main__":
     sys.exit(main())
