@@ -1,29 +1,29 @@
 Main
-==========
+====
 .. automodule:: main
    :members:
 
-Helper: Auxiliary Functions
-======
+Source: Auxiliary Functions
+===========================
 .. automodule:: src.auxfn
    :members:
 
-Helper: Game
-===========
+Source: Game
+============
 .. automodule:: src.game
    :members:
 
-Helper: GUI
-============
+Source: GUI
+===========
 .. automodule:: src.gui
    :members:
 
-Helper: Game load/save
+Source: Game load/save
 ======================
-.. automodule:: src.save
+.. automodule:: src.saves
    :members:
 
-Helper: Market
+Source: Market
 ==============
 .. automodule:: src.market
    :members:

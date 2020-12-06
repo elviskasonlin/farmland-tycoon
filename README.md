@@ -8,7 +8,8 @@ Created by\
 1004210 Pyae Phyo Aung @ Elvis Kason Lin\
 1005262 Kevin Teng Jin Peng\
 1005275 Lin Lin\
-1005477 Theresa Lam Zouh Ling
+1005477 Theresa Lam Zouh Ling\
+100XXXX Chen Ye
 
 Freshmore, Class of 2024, Singapore University Technology and Design
 
@@ -25,13 +26,18 @@ Farmland Tycoon is a farming simulator created in python.
 3. Run `pipenv install --dev` to install development dependencies
 4. Run `pipenv shell` to enter into the `pipenv` environment
 
-# Documentation
+# Generating Documentation with Sphinx
 
-To use [Sphinx](https://packaging.python.org/tutorials/creating-documentation/) for documentation creation,
+Follow the steps below to use [Sphinx](https://packaging.python.org/tutorials/creating-documentation/) for automatic documentation creation in different formats:
 
 1. Install it by running `pipenv install --dev`
 2. Go to the project directory using `cd /path/to/project/docs/`
-3. Next, to generate the documentation, run `make html`
-4. To edit, edit the `index.rst` file inside `./docs/source/`
+3. Next, to generate the documentation, 
+   * run `make html` to generate a html site
+   * run `make pdf` to generate a pdf file
+4. View the generated files by going to `./docs/build/` and entering the corresponding folder (`html/` or `pdf/`)
+5. To edit the generated contents, edit the `index.rst` and other `.rst` files located inside `./docs/source/`
 
 Go to the official sphinx [site](https://www.sphinx-doc.org/en/master/usage/quickstart.html) to understand it in more detail.
+
+Currently, this Sphinx installation uses `rst2pdf` module (installed during `pipenv install --dev`) to generate the documentation in pdf format.
