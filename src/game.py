@@ -4,6 +4,10 @@ game.py
 The game class. Has functions related to the functioning of the game itself.
 """
 
+"""
+Note: Remember to use `update_board_in_gamestate` after every board operation so that the `plots` data in `game_state` is synchronised with the `game_board`
+"""
+
 import copy
 from . import saves as SAVES
 
@@ -24,15 +28,17 @@ class Game(object):
         "warehouse": {}
         }
 
+    game_board = {}
+
     game_ended_flag = False
     start_game_flag = False
 
     def __init__(self):
         pass
 
-    # -------
-    # GETTERS
-    # -------
+    # ----------
+    # Core Stuff
+    # ----------
     
     def get_game_state(self):
         return self.game_state
@@ -43,7 +49,7 @@ class Game(object):
     def get_game_ended_flag(self):
         return self.game_ended_flag
 
-    def can_player_afford(self, cost: float):
+    def can_player_afford(self, cost):
         return self.game_state["money"] >= cost
 
     def get_player_upgrades(self):
@@ -73,10 +79,6 @@ class Game(object):
             (`tuple`): (Plots in x-axis, Plots in y-axis)
         """
         return self.game_state["land"]["size"]
-
-    # -------
-    # SETTERS
-    # -------
 
     def set_land_size(self, xCount: int, yCount: int):
         """
@@ -111,6 +113,7 @@ class Game(object):
         print("create_new_game called!")
 
         self.set_land_size(xCount=3,yCount=3)
+        self.create_board()
 
         self.start_game_flag = True
         return
@@ -125,6 +128,10 @@ class Game(object):
 
         if (operation_flag == 1):
             self.set_game_state(gameState=data)
+
+            self.set_board(data["land"]["plots"])
+            self.update_board_in_gamestate()
+
             print("Game has been loaded from {}".format(file_name))
             self.start_game_flag = True
         else:
@@ -137,6 +144,7 @@ class Game(object):
         """
         Saves the game to an external save file in .json format
         """
+        self.update_board_in_gamestate()
 
         file_name = input("Enter a name for your save: ")
         operation_flag, data = SAVES.save_game(fileName=file_name, gameState=self.get_game_state())
@@ -149,3 +157,36 @@ class Game(object):
             #self.start_game_flag = False
 
         return
+
+    # ------------------------
+    # Board (Plots) Operations
+    # ------------------------
+
+    def update_board_in_gamestate(self):
+        self.game_state["land"]["plots"] = copy.deepcopy(self.game_board)
+
+    def create_board(self):
+        self.game_board = [[""] * self.get_land_size()[0] for i in range(self.get_land_size()[1])]
+
+    def set_board(self, board: list):
+        self.game_board = copy.deepcopy(board)
+        
+    def get_board(self):
+        return self.game_board
+
+    def update_board(self):
+        
+        #
+        # Write your code here
+        #
+
+        self.game_board
+
+        self.update_board_in_gamestate()
+        pass
+
+    def show_board(self):
+        # Currently here for debug purposes only.
+        # Prints out the raw data not a beautified board.
+        # The beautified board should be shown here
+        print(self.get_board())
