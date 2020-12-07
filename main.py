@@ -18,6 +18,9 @@ def start():
     # Create a Game Object
     Game = GAME.Game()
     
+    # Create a Board Object
+    Board = GUI.Board()
+    
     def determine_menu_choice():
         if (Game.get_start_flag() == True):
             return 0
@@ -53,7 +56,7 @@ def start():
             if (user_command == "help"):
                 print(GUI.get_help_menu())
             elif (user_command == "plots"):
-                pass
+                Board.show_board()
             elif (user_command == "plant"):
                 pass
             elif (user_command == "harvest"):
