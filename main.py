@@ -10,23 +10,9 @@ import src.gui as GUI
 import src.game as GAME
 import src.market as MARKET
 
-def start_game_loop(Game: object):
-    """
-    The main game loop.
-
-    Args:
-        * Game (`object`): The Game object as declared in main.start()
-
-    Returns:
-        * None
-    """
-
-    print("Game started")
-    pass
-
 def start():
     """
-    Shows the start game menu and starts the game if a game state is loaded.
+    Contains the core game loop. Shows the start game menu and starts the game if a game state is loaded.
 
     Args:
         * None
@@ -54,6 +40,7 @@ def start():
             Game.load_game()
             menu_choice = determine_menu_choice()
         elif (menu_choice == 3):
+            # For testing only. Will be removed later
             Game.save_game()
             menu_choice = determine_menu_choice()
         else:
@@ -61,7 +48,11 @@ def start():
     
     # Start the game loop
     if (Game.get_start_flag() == True):
-        start_game_loop(Game=Game)
+        
+        while (Game.get_game_ended_flag() != True):
+            user_command = AUXFN.get_user_choice(displayText="Cmd input: ", returnType="str")
+            print(user_command)
+            pass
     
     return
 

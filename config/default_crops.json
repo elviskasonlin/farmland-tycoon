@@ -2,26 +2,26 @@
     "corn": {
         "time": 80,
         "cost": 60,
-        "weather": "normal"
+        "climate": "normal"
     },
     "apple": {
         "time": 90,
         "cost": 65,
-        "weather": "cold"
+        "climate": "cold"
     },
     "cotton": {
         "time": 60,
         "cost": 50,
-        "weather": "hot"
+        "climate": "hot"
     },
     "peanuts": {
         "time": 70,
         "cost": 20,
-        "weather": "cold"
+        "climate": "cold"
     },
     "pineapple": {
         "time": 1000,
         "cost": 20,
-        "weather": "hot"
+        "climate": "hot"
     }
 }

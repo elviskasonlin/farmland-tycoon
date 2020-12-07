@@ -12,15 +12,15 @@ def load_game(fileName):
     Loads game state from a file with name as specified and returns it.
 
     Args:
-        * fileName ('str'): The name of the save file
+        * fileName (`str`): The name of the save file
 
     Returns:
         * If successful, returns a tuple with the following:
-            * 1 ('int'): An integer to flag that the operation was successful
-            * gameState ('dict'): Game state as a dictionary
+            * 1 (`int`): An integer to flag that the operation was successful
+            * gameState (`dict`): Game state as a dictionary
         * If there's an error, returns a tuple with the following:
-            * 0 ('int'): An integer to flag that the operation was unsuccessful
-            * Error message ('str'): A custom error message
+            * 0 (`int`): An integer to flag that the operation was unsuccessful
+            * Error message (`str`): A custom error message
     """
 
     try:
@@ -43,16 +43,16 @@ def save_game(fileName, gameState):
     Saves game state into a file with name as specified in ./saves folder.
 
     Args:
-        * fileName ('str'): The name of the save file
-        * gameState ('dict'): Game state as a dictionary
+        * fileName (`str`): The name of the save file
+        * gameState (`dict`): Game state as a dictionary
 
     Returns:
         * If successful, returns a tuple with the following:
-            * 1 ('int'): An integer to flag that the operation was successful
-            * Success message ('str'): A custom success message with save location
+            * 1 (`int`): An integer to flag that the operation was successful
+            * Success message (`str`): A custom success message with save location
         * If there's an error, returns a tuple with the following:
-            * 0 ('int'): An integer to flag that the operation was unsuccessful
-            * Error message ('str'): A custom error message
+            * 0 (`int`): An integer to flag that the operation was unsuccessful
+            * Error message (`str`): A custom error message
     """
 
     try:
