@@ -13,14 +13,27 @@ class Game(object):
     """
 
     # Variables
-    game_state = { "days": 0, "climate": None, "land": {"size": None, "plots": None}, "upgrades": {"land": 0, "equipment": {"cows": 0, "machinery": 0, "automation": 0}, "labour": 1}, "money": 0, "productivity": None, "maintenance": None }
+    game_state = {
+        "days": 0,
+        "climate": None,
+        "land": {"size": None, "plots": None},
+        "upgrades": {"land": 0, "equipment": {"cows": 0, "machinery": 0, "automation": 0}, "labour": 1},
+        "money": 0,
+        "productivity": None,
+        "maintenance": None,
+        "warehouse": {}
+        }
+
     game_ended_flag = False
     start_game_flag = False
 
     def __init__(self):
         pass
 
+    # -------
     # GETTERS
+    # -------
+    
     def get_game_state(self):
         return self.game_state
     
@@ -61,7 +74,10 @@ class Game(object):
         """
         return self.game_state["land"]["size"]
 
+    # -------
     # SETTERS
+    # -------
+
     def set_land_size(self, xCount: int, yCount: int):
         """
         Sets the number of plots in x and y directions

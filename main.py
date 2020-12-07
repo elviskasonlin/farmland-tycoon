@@ -13,12 +13,6 @@ import src.market as MARKET
 def start():
     """
     Contains the core game loop. Shows the start game menu and starts the game if a game state is loaded.
-
-    Args:
-        * None
-
-    Returns:
-        * None
     """
 
     # Create a Game Object
@@ -32,7 +26,7 @@ def start():
 
     menu_choice = -1
     while (menu_choice != 0):
-        menu_choice = AUXFN.get_user_choice(displayText=GUI.start_menu(), returnType="int")
+        menu_choice = AUXFN.get_user_choice(displayText=GUI.get_start_menu(), returnType="int")
         if (menu_choice == 1):
             Game.create_new_game()
             menu_choice = determine_menu_choice()
@@ -49,9 +43,36 @@ def start():
     # Start the game loop
     if (Game.get_start_flag() == True):
         
+        # Checks whether the game has ended
         while (Game.get_game_ended_flag() != True):
-            user_command = AUXFN.get_user_choice(displayText="Cmd input: ", returnType="str")
+            user_input = AUXFN.get_user_choice(displayText="Cmd input: ", returnType="str").strip().split()
+            user_command = user_input[0].lower()
+            print(user_input)
             print(user_command)
+
+            if (user_command == "help"):
+                print(GUI.get_help_menu())
+            elif (user_command == "plots"):
+                pass
+            elif (user_command == "plant"):
+                pass
+            elif (user_command == "harvest"):
+                pass
+            elif (user_command == "upgrade"):
+                pass
+            elif (user_command == "warehouse"):
+                pass
+            elif (user_command == "sell"):
+                pass
+            elif (user_command == "save"):
+                Game.save_game()
+            elif (user_command == "exit"):
+                u_choice = AUXFN.get_user_choice(displayText="Would you like to save? [Y] or [N]", returnType="str").strip().lower()
+                if (u_choice == "y"):
+                    Game.save_game()
+                else:
+                    pass
+                break
             pass
     
     return
@@ -63,7 +84,7 @@ def main():
 
     menu_choice = -1
     while (menu_choice != 0):
-        menu_choice = AUXFN.get_user_choice(displayText=GUI.main_menu(), returnType="int")
+        menu_choice = AUXFN.get_user_choice(displayText=GUI.get_main_menu(), returnType="int")
 
         if (menu_choice == 1):
             # Start game

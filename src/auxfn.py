@@ -34,6 +34,25 @@ def get_user_choice(displayText: str, returnType: str):
 
     return output
 
+def load_configuration(fileName):
+    """
+    Returns the default variables in the specified json file as a dictionary
+
+    Args:
+        fileName (`str`): The name of the configuraiton file without the file type suffix
+
+    Returns:
+        (`dict`): Configuration data as a dictionary
+    """
+    import json
+
+    r_filename = "./config/" + fileName + ".json"
+
+    f = open(r_filename, "r")
+    data_as_dict = json.load(f)
+    f.close()
+
+    return data_as_dict
 
 def settings():
     """
