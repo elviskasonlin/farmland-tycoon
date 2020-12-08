@@ -46,6 +46,7 @@ def start():
             # Get user command input
             print("\n" + "-" * Game.get_game_output_width() + "\n")
             print("Current turn usage (Max 7): ", Game.get_turn_day_usage())
+            print("Day Number: ", Game.get_current_day())
             user_input = AUXFN.get_user_choice(displayText="\nCmd input: ", returnType="str").strip().split()
             user_command = user_input[0].lower()
 
