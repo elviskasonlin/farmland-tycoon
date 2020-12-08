@@ -76,7 +76,7 @@ class Game(object):
         Returns:
             * game_state (`dict`): The current game state as a dictionary
         """
-        self.update_board_in_gamestate
+        self.update_board_in_gamestate()
         return self.game_state
 
     def get_current_day(self):
@@ -359,6 +359,7 @@ class Game(object):
             return True
 
     def is_plot_empty(self, xCoord: int, yCoord: int):
+       # Not used due to time constraints. Directly accessed in the functions that need it
         """
         Checks if plot is empty at specified coordinates
 

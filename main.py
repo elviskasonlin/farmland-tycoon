@@ -4,6 +4,10 @@ Main.py
 The main entry point for the game
 """
 
+# Features yet to implement
+# - Maintenance cost (implement plot maintenance count check, implement upgrades maintenance check)
+# - User setting to change the board size
+
 import sys
 import src.auxfn as AUXFN
 import src.gui as GUI
@@ -46,10 +50,10 @@ def start():
             # Get user command input
             print("\n" + "-" * Game.get_game_output_width() + "\n")
             print("Day Number: ", Game.get_current_day())
-            print("Current turn usage (Max 7): ", Game.get_turn_day_usage())
+            print("Current turn usage (Max 7): ", round(Game.get_turn_day_usage(),2))
             print("Your money: ", Game.get_money())
-            print("Current productivity level: ", Game.get_productivity_modifier())
-            user_input = AUXFN.get_user_choice(displayText="\nCmd input: ", returnType="str").strip().split()
+            print("Current productivity level: ", round(Game.get_productivity_modifier(),2))
+            user_input = AUXFN.get_user_choice(displayText="\n{}Cmd input: {}".format(GUI.TypeFormat.BOLD, GUI.TypeFormat.END), returnType="str").strip().split()
             user_command = None
             try:
                 user_command = user_input[0].lower()
