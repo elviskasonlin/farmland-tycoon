@@ -29,7 +29,7 @@
     },
     "pineapple": {
         "abbreviation": "pine",
-        "time": 1000,
+        "time": 100,
         "cost": 20,
         "sell": 250,
         "climate": "hot"

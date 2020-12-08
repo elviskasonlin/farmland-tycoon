@@ -232,6 +232,9 @@ class Game(object):
     def get_productivity_modifier(self):
         return self.game_state["productivity"]
 
+    def get_money(self):
+        return self.game_state["money"]
+
     # +++++++++++++
     # Core: Setters
     # +++++++++++++
@@ -270,12 +273,12 @@ class Game(object):
     def set_initial_conditions(self):
         self.game_state["money"] = 10000
 
-    def add_to_warehouse(self, crop: str, quantity: int):
-        self.game_state["warehouse"].update({crop: quantity})
+    def add_to_warehouse(self, crop: str, quantity):
+        self.game_state["warehouse"].update({crop: int(quantity)})
     
-    def remove_from_warehouse(self, crop: str, quantity: int):
+    def remove_from_warehouse(self, crop: str, quantity):
         if (crop in self.game_state["warehouse"]):
-            self.game_state["warehouse"][crop] -= quantity
+            self.game_state["warehouse"][crop] -= int(quantity)
             if (self.game_state["warehouse"][crop] <= 0):
                 del self.game_state["warehouse"][crop]
         return
@@ -607,8 +610,9 @@ class Game(object):
                 return
             else:
                 crop_yield = 1.0
-                if ("land" in player_upgrades):
-                    crop_yield = 2**player_upgrades["land"]
+                if (player_upgrades != None):
+                    if ("land" in player_upgrades):
+                        crop_yield = 2**player_upgrades["land"]
                 self.add_to_warehouse(crop=crop_name, quantity=crop_yield)
 
                 time_taken = 4 / self.get_productivity_modifier()
@@ -645,6 +649,7 @@ class Game(object):
             self.game_board[coordY][coordX]["cropName"] = cropType
             self.game_board[coordY][coordX]["timestamp"] = current_day
 
+            self.game_state["money"] -= available_crops[cropType]["cost"]
             time_taken = 4 / self.get_productivity_modifier()
             self.current_turn_day_usage += time_taken
         else:
@@ -697,10 +702,10 @@ class Game(object):
             if (cropName in warehouse_items):
                 item_count = self.game_state["warehouse"][cropName]
                 price_of_crop = available_crops[cropName]["sell"]
-                if (quantity <= item_count): 
+                if (float(quantity) <= item_count): 
                     revenue = item_count * price_of_crop
                     self.game_state["money"] += revenue
-                    self.remove_from_warehouse(crop=cropName, quantity=quantity)
+                    self.remove_from_warehouse(crop=cropName, quantity=int(quantity))
                 else:
                     print("I don't have enough crops to sell.")
             else:

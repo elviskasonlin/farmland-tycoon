@@ -24,7 +24,7 @@
         "repair": 2000
     },
     "labour": {
-        "cost": 0,
+        "cost": 500,
         "maintenance": 50,
         "pmodifier": 0.1,
         "repair": 0

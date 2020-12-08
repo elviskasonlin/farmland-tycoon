@@ -45,10 +45,17 @@ def start():
         while (Game.get_game_ended_flag() != True):
             # Get user command input
             print("\n" + "-" * Game.get_game_output_width() + "\n")
-            print("Current turn usage (Max 7): ", Game.get_turn_day_usage())
             print("Day Number: ", Game.get_current_day())
+            print("Current turn usage (Max 7): ", Game.get_turn_day_usage())
+            print("Your money: ", Game.get_money())
+            print("Current productivity level: ", Game.get_productivity_modifier())
             user_input = AUXFN.get_user_choice(displayText="\nCmd input: ", returnType="str").strip().split()
-            user_command = user_input[0].lower()
+            user_command = None
+            try:
+                user_command = user_input[0].lower()
+            except Exception:
+                print("Unexpected error occurred!")
+                pass
 
             # ---------------------
             # Handle command inputs
@@ -79,11 +86,13 @@ def start():
                     crop_name = user_input[2].lower()
                     crop_validity = Game.is_crop_valid(cropName=crop_name)
                 except Exception:
-                    print("Invalid input. Please input coordinates followed by a crop name like so: `1,1 apple`")
+                    print("Invalid input. Please input coordinates followed by a crop name like so: `plant 1,1 apple`")
                     continue
                 else:
                     if (coord_validity == True and crop_validity == True):
                         Game.plant(coordX=coord_x, coordY=coord_y, cropType=crop_name)
+                    else:
+                        print("Invalid input. Please input coordinates followed by a crop name like so: `plant 1,1 apple`")
                 pass
 
             elif (user_command == "harvest"):
@@ -125,8 +134,6 @@ def start():
                 # Lists purchased upgrades
 
                 upgrades = Game.get_player_upgrades()
-                print("Upgrades variable: ")
-                print(upgrades)
                 if (upgrades != None):
                     print(GUI.print_beautified_dictionary(upgrades))
                 else:
