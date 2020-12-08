@@ -9,7 +9,7 @@ Created by\
 1005262 Kevin Teng Jin Peng\
 1005275 Lin Lin\
 1005477 Theresa Lam Zouh Ling\
-100XXXX Chen Ye
+1003595 Yang Chen Ye
 
 Freshmore, Class of 2024, Singapore University Technology and Design
 

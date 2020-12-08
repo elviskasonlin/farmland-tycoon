@@ -96,6 +96,8 @@ def get_help_menu():
     body = """
     Available commands:
 
+    {0}`next`:{1}
+    \t {2}Ends current turn{1}\n
     {0}`plots`:{1}
     \t {2}Shows the game board{1}\n
     \t Example: `plots`\n
@@ -144,5 +146,27 @@ def print_beautified_dictionary(dictionary: dict):
     """
     output = ""
     for item, value in dictionary.items():
-        output = output.join(str(item) + ": " + str(value) + "\n")
+        output += str(item) + ": " + str(value) + "\n"
+    return output
+
+def print_available(dictionary: dict, type: str):
+    """
+    Returns a beautified dictionary for availability stuff ready for printing to console.
+    This is a _very_ specialised function.
+
+    Args:
+        dictionary (`dict`): The dictionary items to beautify
+
+    Returns:
+        (`str`): Beautified dictionary as a string
+    """
+    output = ""
+
+    if (type == "crop"):
+        for key, another_dict in dictionary.items():
+            output += """{}: \n\t abbr: {}\n\t cost: {}\n\t time cost: {}\n\t sell price: {}\n""".format(str(key), another_dict["abbreviation"], another_dict["cost"], another_dict["time"], another_dict["sell"])
+    else:
+        for key, another_dict in dictionary.items():
+            output += """{}: \n\t cost: {}\n\t productivity modifier: {}\n\t maintenance: {}\n""".format(str(key), another_dict["cost"], another_dict["pmodifier"], another_dict["maintenance"])
+
     return output

@@ -44,10 +44,10 @@ def start():
         # Checks whether the game has ended
         while (Game.get_game_ended_flag() != True):
             # Get user command input
-            user_input = AUXFN.get_user_choice(displayText="\n" + "-" * Game.get_game_output_width() + "\nCmd input: ", returnType="str").strip().split()
+            print("\n" + "-" * Game.get_game_output_width() + "\n")
+            print("Current turn usage (Max 7): ", Game.get_turn_day_usage())
+            user_input = AUXFN.get_user_choice(displayText="\nCmd input: ", returnType="str").strip().split()
             user_command = user_input[0].lower()
-            print(user_input)
-            print(user_command)
 
             # ---------------------
             # Handle command inputs
@@ -58,17 +58,14 @@ def start():
                 # ACTION: Help
                 # ============
                 # Show help menu
-
                 print(GUI.get_help_menu())
 
-            elif (user_command == "plots"):
+            elif (user_command == "plots" or user_command == "p"):
                 # =============
                 # ACTION: Plots
                 # =============
-                # Shows the game board
-
-                # Debug: Currently only printing the raw board data
-                print(Game.show_board())
+                # Shows the game board 
+                print(Game.get_beautified_board())
 
             elif (user_command == "plant"):
                 # =============
@@ -130,22 +127,21 @@ def start():
                 print("Upgrades variable: ")
                 print(upgrades)
                 if (upgrades != None):
-                    GUI.print_beautified_dictionary(upgrades)
+                    print(GUI.print_beautified_dictionary(upgrades))
                 else:
                     print("You have no upgrades purchased.")
                 pass
 
             elif (user_command == "warehouse"):
+                # Done
                 # =================
                 # ACTION: Warehouse
                 # =================
                 # Check warehouse and print items in the warehouse
 
                 warehouse_items = Game.get_warehouse_items()
-                print("Warehous_items variable: ")
-                print(warehouse_items)
                 if (warehouse_items != None):
-                    GUI.print_beautified_dictionary(warehouse_items)
+                    print(GUI.print_beautified_dictionary(warehouse_items))
                 else:
                     print("The warehouse is empty.")
                 pass
@@ -195,6 +191,7 @@ def start():
                 # ACTION: Crops
                 # ==============
                 # Print out available crops
+                print("Available crops:\n", GUI.print_available(dictionary=Game.get_available_crops(), type="crop"))
                 pass
 
             elif (user_command == "upgrades"):
@@ -202,14 +199,13 @@ def start():
                 # ACTION: Upgrades
                 # ================
                 # Print out available upgrades
+                print("Available upgrades:\n", GUI.print_available(dictionary=Game.get_available_upgrades(), type="upgrade"))
                 pass
 
             elif (user_command == "debug"):
                 # REMEMBER TO REMOVE THIS FROM PRODUCTION
                 # For general debug stuff.
-                Game.update_board_value(attribute="isEmpty", value=False, xCoord=1, yCoord=2)
-                Game.update_board_value(attribute="cropName", value="corn", xCoord=1, yCoord=2)
-                Game.get_beautified_board()
+                pass
 
             else:
                 print("Invalid command. For a list of available commands, please type in `help`.")
@@ -217,7 +213,9 @@ def start():
             # end of if statement
 
             # Check whether this turn should end
-            Game.get_day_usage()
+            if (Game.should_next_turn() == True):
+                Game.next_turn()
+                Game.update_game_ended_condition()
 
             pass # end of while loop
         # end of game loop

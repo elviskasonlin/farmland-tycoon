@@ -80,6 +80,12 @@ class Game(object):
         return self.game_state
 
     def get_current_day(self):
+        """
+        Returns the current day as per game_state
+
+        Returns:
+            (`int`): Current day number
+        """
         return self.game_state["days"]
     
     def get_start_flag(self):
@@ -220,8 +226,11 @@ class Game(object):
 
         return output
 
-    def get_day_usage(self):
-        pass
+    def get_turn_day_usage(self):
+        return self.current_turn_day_usage
+
+    def get_productivity_modifier(self):
+        return self.game_state["productivity"]
 
     # +++++++++++++
     # Core: Setters
@@ -256,6 +265,19 @@ class Game(object):
             * gameState (`dict`): The game state as a dictionary
         """
         self.game_state = copy.deepcopy(gameState)
+        return
+
+    def set_initial_conditions(self):
+        self.game_state["money"] = 10000
+
+    def add_to_warehouse(self, crop: str, quantity: int):
+        self.game_state["warehouse"].update({crop: quantity})
+    
+    def remove_from_warehouse(self, crop: str, quantity: int):
+        if (crop in self.game_state["warehouse"]):
+            self.game_state["warehouse"][crop] -= quantity
+            if (self.game_state["warehouse"][crop] <= 0):
+                del self.game_state["warehouse"][crop]
         return
 
     # ------
@@ -344,22 +366,6 @@ class Game(object):
         item_at_loc = self.game_board[xCoord][yCoord]
         return None
 
-    def is_harvestable(self, xCoord: int, yCoord: int):
-        self.check_crop_age(xCoord=xCoord, yCoord=yCoord)
-        # check with the time it takes to harvest
-        crop_at_loc = self.get_crop_at_loc(xCoord=xCoord, yCoord=yCoord)
-        planted_timestamp = None
-        time_since_planted = None
-        if (time_since_planted == None):
-            pass
-        return None
-
-    def check_crop_age(self, xCoord: int, yCoord: int):
-        return None
-
-    def get_crop_at_loc(self, xCoord: int, yCoord: int):
-        return None
-
     # ---------------------
     # Create/Load/Save Game
     # ---------------------
@@ -374,6 +380,7 @@ class Game(object):
         self.set_land_size(xCount=3,yCount=3)
         self.set_game_output_width(95)
         self.create_board()
+        self.set_initial_conditions()
 
         self.start_game_flag = True
         return
@@ -480,10 +487,13 @@ class Game(object):
         }
         self.game_board[yCoord][xCoord] = copy.deepcopy(default_dict)
 
-    def get_board_with_values(self):
-        # Currently here for debug purposes only.
-        # Prints out the raw data not a beautified board.
-        # The beautified board should be shown here
+    def __get_board_with_values(self):
+        """
+        Returns a board with "-" and "|" added for printing
+
+        Returns:
+            (`list`): The board with "-" and "|" added as borders
+        """
         game_board = self.get_board()
         
         # Create an empty output list with space for the lines
@@ -508,6 +518,7 @@ class Game(object):
             if (each % 2 == 0):
                 output[each] = copy.deepcopy(row_sep_list)
 
+        # Fill the empty list with actual board values
         for y in range(len(game_board)):
             for x in range(len(game_board[y])):
                 dict_at_coords = game_board[y][x]
@@ -527,22 +538,35 @@ class Game(object):
         return output
 
     def get_beautified_board(self):
-        board_as_list = self.get_board_with_values()
+        """
+        Returns the board as a string for display complete with obrders
+
+        Returns:
+            (`str`): Beautified game_board as string
+        """
+        board_as_list = self.__get_board_with_values()
         output = ""
         for y in range(len(board_as_list)):
             for x in range(len(board_as_list[y])):
                 output += board_as_list[y][x]
             output += "\n"
-        print(output)
+        return output
 
     # ------------
     # Game Actions
     # ------------
 
     def next_turn(self):
-        # Remember to reset curent turn usage
+        self.game_state["days"] += 7
+        # Reset curent turn usage
         self.current_turn_day_usage = 0
         return None
+
+    def should_next_turn(self):
+        if (self.current_turn_day_usage > 7):
+            return True
+        else:
+            return False
 
     def harvest(self, coordX: int, coordY: int):
         """
@@ -559,9 +583,42 @@ class Game(object):
         # DAY: Update time taken to crop by dividing with productivity value
         # Adds the crop to the warehouse multiplied by the yield 
 
+        game_board = self.get_board()
+        player_upgrades = self.get_player_upgrades()
+        is_plot_empty = game_board[coordY][coordX]["isEmpty"]
+        crop_timestamp = game_board[coordY][coordX]["timestamp"]
+        crop_name = game_board[coordY][coordX]["cropName"]
+
+        current_day = self.get_current_day()
+        crop_maturity_time = 0
+        days_since_plant = 0
+        is_harvestable = False
+
+        if (is_plot_empty == True):
+            print("I can't do that. The plot is empty.")
+            return
+        else:
+            crop_maturity_time = self.get_available_crops()[crop_name]["time"]
+            days_since_plant = current_day - crop_timestamp
+            is_harvestable = days_since_plant >= crop_maturity_time
+
+            if (is_harvestable == False):
+                print("I can't do that. The crop is not ready for harvesting.")
+                return
+            else:
+                crop_yield = 1.0
+                if ("land" in player_upgrades):
+                    crop_yield = 2**player_upgrades["land"]
+                self.add_to_warehouse(crop=crop_name, quantity=crop_yield)
+
+                time_taken = 4 / self.get_productivity_modifier()
+                self.current_turn_day_usage += time_taken
+
+                self.reset_plot_to_default(xCoord=coordX, yCoord=coordY)
+            
+        self.update_board_in_gamestate()
         return None
 
-    
     def plant(self, coordX: int, coordY: int, cropType: str):
         """
         Plants a crop at a given (x,y) coordinate
@@ -577,7 +634,25 @@ class Game(object):
         # If all the conditions are met, plant the crop at the board
         # DAY: Update time taken to crop by dividing with productivity value
         # Synchronise board and board in game_state
-        
+
+        game_board = self.get_board()
+        available_crops = self.get_available_crops()
+        is_plot_empty = game_board[coordY][coordX]["isEmpty"]
+        current_day = self.get_current_day()
+
+        if (is_plot_empty == True and self.can_player_afford(cost=available_crops[cropType]["cost"]) == True):
+            self.game_board[coordY][coordX]["isEmpty"] = False
+            self.game_board[coordY][coordX]["cropName"] = cropType
+            self.game_board[coordY][coordX]["timestamp"] = current_day
+
+            time_taken = 4 / self.get_productivity_modifier()
+            self.current_turn_day_usage += time_taken
+        else:
+            if (is_plot_empty == False):
+                print("I can't plant at {}, {}. The plot is not empty.".format(coordX, coordY))
+            else:
+                print("I can't afford the cost of the crop.")
+        self.update_board_in_gamestate
         return None
 
     def purchase_upgrade(self, upgradeName: str):
@@ -586,14 +661,51 @@ class Game(object):
         # If condition is met, purcahse the upgrade
         # Add count to the upgrade in game state
         # Modify productivity parameter
-        # Modify maintainence parameter
+
+        available_upgrades = self.get_available_upgrades()
+        cost_of_upgrade = available_upgrades[upgradeName]["cost"]
+        p_mod = available_upgrades[upgradeName]["pmodifier"]
+        can_player_afford = self.can_player_afford(cost=cost_of_upgrade)
+
+        if (can_player_afford == True):
+            self.game_state["money"] -= cost_of_upgrade
+            if (upgradeName in self.game_state["upgrades"]):
+                self.game_state["upgrades"][upgradeName] += 1
+            else:
+                self.game_state["upgrades"].update({upgradeName: 1})
+            self.game_state["productivity"] += p_mod
+
         return None
 
     def sell_crop(self, cropName: str, quantity: int):
+        """
+        Sell the crop from warehouse
+
+        Args:
+            * cropName (str): Name of the crop
+            * quantity (int): Amount to sell
+        """
         # Assumes that the cropName is valid. (Check done before calling this function)
         # Check if the the crop quantity to be sold is enough
-
-        warehouse_items = self.get_warehouse_items()
         # If not, don't do anything. Show error message
         # If yes, reduce crop quantity. Increase player money by the qty * sell price
+
+        warehouse_items = self.get_warehouse_items()
+        available_crops = self.get_available_crops()
+
+        if (warehouse_items != None):
+            if (cropName in warehouse_items):
+                item_count = self.game_state["warehouse"][cropName]
+                price_of_crop = available_crops[cropName]["sell"]
+                if (quantity <= item_count): 
+                    revenue = item_count * price_of_crop
+                    self.game_state["money"] += revenue
+                    self.remove_from_warehouse(crop=cropName, quantity=quantity)
+                else:
+                    print("I don't have enough crops to sell.")
+            else:
+                print("There's no crop named {} to sell.".format(cropName))
+        else:
+            print("There's no crop named {} to sell.".format(cropName))
+
         return None
