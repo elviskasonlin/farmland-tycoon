@@ -207,7 +207,9 @@ def start():
             elif (user_command == "debug"):
                 # REMEMBER TO REMOVE THIS FROM PRODUCTION
                 # For general debug stuff.
-                print(Game.game_state["upgrades"])
+                Game.update_board_value(attribute="isEmpty", value=False, xCoord=1, yCoord=2)
+                Game.update_board_value(attribute="cropName", value="corn", xCoord=1, yCoord=2)
+                Game.get_beautified_board()
 
             else:
                 print("Invalid command. For a list of available commands, please type in `help`.")
@@ -215,6 +217,7 @@ def start():
             # end of if statement
 
             # Check whether this turn should end
+            Game.get_day_usage()
 
             pass # end of while loop
         # end of game loop

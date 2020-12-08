@@ -32,8 +32,8 @@ class Game(object):
         }
 
     # Contains the game_board. Once all operations are done,
-    # Remember to copy this dictionary back into the game_state["land"]["plots"]
-    game_board = {}
+    # Remember to copy this list back into the game_state["land"]["plots"]
+    game_board = list()
 
     # Dictionaries containing the types and values for each of the crops -
     # - and upgrades as defined in the configuraiton files
@@ -56,8 +56,8 @@ class Game(object):
     def __init__(self):
         try:
             # Load the data for crops and upgrades as defined in the config files
-            self.available_crops = AUXFN.load_configuration("default_crops")
-            self.available_upgrades = AUXFN.load_configuration("default_upgrades")
+            self.available_crops = copy.deepcopy(AUXFN.load_configuration("default_crops"))
+            self.available_upgrades = copy.deepcopy(AUXFN.load_configuration("default_upgrades"))
         except Exception:
             raise Exception("Encountered error while loading configuration files.")
 
@@ -78,6 +78,9 @@ class Game(object):
         """
         self.update_board_in_gamestate
         return self.game_state
+
+    def get_current_day(self):
+        return self.game_state["days"]
     
     def get_start_flag(self):
         """
@@ -155,7 +158,7 @@ class Game(object):
         Returns:
             * (`dict`): All available crops
         """
-        return self.available_crops
+        return copy.deepcopy(self.available_crops)
 
     def get_available_upgrade_names(self):
         """
@@ -339,7 +342,7 @@ class Game(object):
             yCoord (int): [description]
         """
         item_at_loc = self.game_board[xCoord][yCoord]
-        pass
+        return None
 
     def is_harvestable(self, xCoord: int, yCoord: int):
         self.check_crop_age(xCoord=xCoord, yCoord=yCoord)
@@ -349,13 +352,13 @@ class Game(object):
         time_since_planted = None
         if (time_since_planted == None):
             pass
-        pass
+        return None
 
     def check_crop_age(self, xCoord: int, yCoord: int):
-        pass
+        return None
 
     def get_crop_at_loc(self, xCoord: int, yCoord: int):
-        pass
+        return None
 
     # ---------------------
     # Create/Load/Save Game
@@ -422,30 +425,115 @@ class Game(object):
         self.game_state["land"]["plots"] = copy.deepcopy(self.game_board)
 
     def create_board(self):
-        self.game_board = [[""] * self.get_land_size("x") for i in range(self.get_land_size("y"))]
+        """
+        Creates an empty board with default values based on the land_size values set during create_new_game().
+        """
+        default_dict = {
+            "isEmpty": True,
+            "cropName": "",
+            "timestamp": 0
+        }
+        row_list = []
+
+        for each in range(self.get_land_size("x")):
+            row_list.append(copy.deepcopy(default_dict))
+
+        for each in range(self.get_land_size("y")):
+            self.game_board.append(copy.deepcopy(row_list))
 
     def set_board(self, board: list):
+        """
+        Set the game_board in one go
+
+        Args:
+            board (list): Game board as a list
+        """
         self.game_board = copy.deepcopy(board)
         
     def get_board(self):
+        """
+        Returns the entire board
+
+        Returns:
+            * (`list`): Game board as a list
+        """
         return self.game_board
 
-    def update_board(self):
-        
-        #
-        # Write your code here
-        #
+    def update_board_value(self, attribute: str, value, xCoord: int, yCoord: int):
+        """
+        Updates the attribute of the item at location (x,y) on the board. Assumes that xCoord and yCoord entered is valid so please do the validity check before calling this function.
 
-        self.game_board
-
+        Args:
+            attribute (str): The attribute to modify. Available attributes are: "isEmpty (bool)", "cropName (str)", and "timestamp (int)"
+            value (Any): The value to be changed to
+            xCoord (int): x-coordinate on the board
+            yCoord (int): y-coordinate on the board
+        """
+        self.game_board[yCoord][xCoord][attribute] = value
         self.update_board_in_gamestate()
-        pass
 
-    def show_board(self):
+    def reset_plot_to_default(self, xCoord: int, yCoord: int):
+        default_dict = {
+            "isEmpty": True,
+            "cropName": "",
+            "timestamp": 0
+        }
+        self.game_board[yCoord][xCoord] = copy.deepcopy(default_dict)
+
+    def get_board_with_values(self):
         # Currently here for debug purposes only.
         # Prints out the raw data not a beautified board.
         # The beautified board should be shown here
-        print(self.get_board())
+        game_board = self.get_board()
+        
+        # Create an empty output list with space for the lines
+        output = list()
+        default_item = ""
+        row_list = []
+        row_sep_list = []
+        available_crops = self.get_available_crops()
+
+        new_x_count = self.get_land_size("x") * 2 + 1
+        new_y_count = self.get_land_size("y") * 2 + 1
+
+        for each in range(new_x_count):
+            row_list.append(copy.deepcopy(default_item))
+            if (each % 2 == 0):
+                row_sep_list.append("-")
+                row_list[each] = "|"
+            else:
+                row_sep_list.append("-"*9)
+        for each in range(new_y_count):
+            output.append(copy.deepcopy(row_list))
+            if (each % 2 == 0):
+                output[each] = copy.deepcopy(row_sep_list)
+
+        for y in range(len(game_board)):
+            for x in range(len(game_board[y])):
+                dict_at_coords = game_board[y][x]
+                is_empty = dict_at_coords["isEmpty"]
+                crop_name = str(dict_at_coords["cropName"])
+                timestamp = dict_at_coords["timestamp"]
+                crop_age = self.get_current_day() - timestamp
+
+                str_to_put = ""
+                if (is_empty == True):
+                    str_to_put = "{:^5s}{:0>4d}".format("NIL", 0)
+                else:
+                    str_to_put = "{:^5s}{:0>4d}".format(available_crops[crop_name]["abbreviation"].upper(), crop_age)
+
+                output[y*2+1][x*2+1] = str_to_put
+        
+        return output
+
+    def get_beautified_board(self):
+        board_as_list = self.get_board_with_values()
+        output = ""
+        for y in range(len(board_as_list)):
+            for x in range(len(board_as_list[y])):
+                output += board_as_list[y][x]
+            output += "\n"
+        print(output)
 
     # ------------
     # Game Actions
@@ -454,7 +542,7 @@ class Game(object):
     def next_turn(self):
         # Remember to reset curent turn usage
         self.current_turn_day_usage = 0
-        pass
+        return None
 
     def harvest(self, coordX: int, coordY: int):
         """
@@ -471,7 +559,7 @@ class Game(object):
         # DAY: Update time taken to crop by dividing with productivity value
         # Adds the crop to the warehouse multiplied by the yield 
 
-        pass
+        return None
 
     
     def plant(self, coordX: int, coordY: int, cropType: str):
@@ -490,7 +578,7 @@ class Game(object):
         # DAY: Update time taken to crop by dividing with productivity value
         # Synchronise board and board in game_state
         
-        pass
+        return None
 
     def purchase_upgrade(self, upgradeName: str):
         # Assumes that the upgradeName is valid. (Check done before calling this function)
@@ -499,7 +587,7 @@ class Game(object):
         # Add count to the upgrade in game state
         # Modify productivity parameter
         # Modify maintainence parameter
-        pass
+        return None
 
     def sell_crop(self, cropName: str, quantity: int):
         # Assumes that the cropName is valid. (Check done before calling this function)
@@ -508,4 +596,4 @@ class Game(object):
         warehouse_items = self.get_warehouse_items()
         # If not, don't do anything. Show error message
         # If yes, reduce crop quantity. Increase player money by the qty * sell price
-        pass
+        return None
