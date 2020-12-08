@@ -18,25 +18,36 @@ class Game(object):
     """
 
     # Variables
+
+    # Game state with default values
     game_state = {
         "days": 0,
-        "climate": None,
+        "climate": "",
         "land": {"size": None, "plots": None},
-        "upgrades": {"land": 0, "cows": 0, "machinery": 0, "automation": 0, "labour": 1},
+        "upgrades": {},
         "money": 0,
-        "productivity": None,
-        "maintenance": None,
+        "productivity": 1,
+        "maintenance": 0,
         "warehouse": {}
         }
 
+    # Contains the game_board. Once all operations are done,
+    # Remember to copy this dictionary back into the game_state["land"]["plots"]
     game_board = {}
-    game_output_width = 95
 
+    # Dictionaries containing the types and values for each of the crops -
+    # - and upgrades as defined in the configuraiton files
     available_crops = {}
     available_upgrades = {}
 
+    # Flags
     game_ended_flag = False
     start_game_flag = False
+
+    # Other variables
+    game_ended_type = None
+    game_output_width = 95
+    current_turn_day_usage = 0
 
     # --------------
     # Initialisation
@@ -44,6 +55,7 @@ class Game(object):
 
     def __init__(self):
         try:
+            # Load the data for crops and upgrades as defined in the config files
             self.available_crops = AUXFN.load_configuration("default_crops")
             self.available_upgrades = AUXFN.load_configuration("default_upgrades")
         except Exception:
@@ -53,9 +65,9 @@ class Game(object):
     # Core Stuff
     # ----------
     
-    # +++++++
+    # +++++++++++++
     # Core: Getters
-    # +++++++
+    # +++++++++++++
 
     def get_game_state(self):
         """
@@ -81,31 +93,27 @@ class Game(object):
         Returns the flag for whether the game can has ended.
 
         Returns:
-            * (`bool`): Flag for whether the game has ended
+            * (`bool`): `True` if end condition is met. `False` if otherwise.
         """
         return self.game_ended_flag
-
-    def get_game_output_width(self):
-        return self.game_output_width
-
-    def get_player_upgrades(self):
+    
+    def get_game_ended_type(self):
         """
-        Gets player's current upgrades and returns it as a tuple
+        Returns the type of condition the game has met
 
         Returns:
-            * (tuple): land_tier, equipment_cows_count, equipment_machinery_count, equipment_automation_count, labour_count
+            * (`int` or `None`):  Default of `None`. `0` if player loses, `1` if player wins.
         """
+        return self.game_ended_type
 
-        upgrades = self.game_state["upgrades"]
+    def get_game_output_width(self):
+        """
+        Returns the max terminal output width as set previously
 
-        land_tier = upgrades["land"]
-        equipment_cows_count = upgrades["cows"]
-        equipment_machinery_count = upgrades["machinery"]
-        equipment_automation_count = upgrades["automation"]
-        labour_count = upgrades["labour"]
-
-        to_return = (land_tier, equipment_cows_count, equipment_machinery_count, equipment_automation_count, labour_count)
-        return to_return
+        Returns:
+            (`int`): Max output width
+        """
+        return self.game_output_width
     
     def get_land_size(self, axis=None):
         """
@@ -139,6 +147,15 @@ class Game(object):
         for crop in self.available_crops:
             available_crops_as_list.append(crop)
         return available_crops_as_list
+    
+    def get_available_crops(self):
+        """
+        Returns the entire crop dictionary including attributes
+
+        Returns:
+            * (`dict`): All available crops
+        """
+        return self.available_crops
 
     def get_available_upgrade_names(self):
         """
@@ -152,11 +169,68 @@ class Game(object):
             available_upgrades_as_list.append(upgrade)
         return available_upgrades_as_list
 
-    # +++++++
+    def get_available_upgrades(self):
+        """
+        Returns the entire upgrades dictionary
+
+        Returns:
+            * (`dict`): All available upgrades including attributes
+        """
+        return self.available_upgrades
+        
+    def get_player_upgrades(self):
+        """
+        Gets player's current upgrades and returns it as a dictionary
+
+        Returns:
+            (`dict` or `None`): Returns a dict with filled entires if there's upgrades. Otherwise, returns `None`
+        """
+
+        output = dict()
+        upgrades_as_dict = self.game_state["upgrades"]
+
+        if (len(upgrades_as_dict) == 0):
+            output = None
+        else:
+            output = copy.deepcopy(upgrades_as_dict)
+
+        return output
+    
+    def get_warehouse_items(self):
+        """
+        Returns a list with the names and the corresponding amount of items currently stored in the warehouse.
+
+        Returns:
+            (`dict` or `None`): Returns a dict with filled entires if there's items stored. Otherwise, returns `None`
+        """
+        # Check warehouse items
+        # Return what's inside the warehouse
+        # If none, return `None`
+
+        output = dict()
+        warehouse_items_as_dict = self.game_state["warehouse"]
+
+        if (len(warehouse_items_as_dict) == 0):
+            output = None
+        else:
+            output = copy.deepcopy(warehouse_items_as_dict)
+
+        return output
+
+    def get_day_usage(self):
+        pass
+
+    # +++++++++++++
     # Core: Setters
-    # +++++++
+    # +++++++++++++
 
     def set_game_output_width(self, width: int):
+        """
+        Sets the max terminal output width
+
+        Args:
+            width (int): Max terminal output width
+        """
         self.game_output_width = width
         return
 
@@ -188,6 +262,25 @@ class Game(object):
     def can_player_afford(self, cost):
         return self.game_state["money"] >= cost
 
+    def update_game_ended_condition(self):
+        """
+        Checks whether the end condition has been met.
+        Then updates game_ended_flag and game_ended_type.
+        """
+        flag, type = None, None
+        player_money = self.get_game_state()["money"]
+        if (player_money <= 0):
+            flag = True
+            type = 0
+        elif (player_money >= 1000000):
+            flag = True
+            type = 1
+        else:
+            flag = False
+        self.game_ended_type = flag
+        self.game_ended_flag = type
+        return
+
     def is_coord_valid(self, coordX: int, coordY: int):
         """
         Checks whether a coordinate is valid
@@ -207,11 +300,62 @@ class Game(object):
         else:
             return True
 
-    def is_plant_valid(self, plantType: str):
-        if (plantType not in self.get_available_crop_names()):
+    def is_crop_valid(self, cropName: str):
+        """
+        Checks whether the crop specified is a valid entry
+
+        Args:
+            cropName (str): The name of the crop to check.
+
+        Returns:
+            (`bool`): True if valid, False if it isn't
+        """
+        if (cropName not in self.get_available_crop_names()):
             return False
         else:
             return True
+
+    def is_upgrade_valid(self, upgradeName: str):
+        """
+        Checks whether the upgrade name specified is a valid entry
+
+        Args:
+            upgradeName (str): The name of the upgrade
+
+        Returns:
+            (`bool`): True if valid, False if it isn't
+        """
+        if (upgradeName not in self.get_available_upgrade_names()):
+            return False
+        else:
+            return True
+
+    def is_plot_empty(self, xCoord: int, yCoord: int):
+        """
+        Checks if plot is empty at specified coordinates
+
+        Args:
+            xCoord (int): [description]
+            yCoord (int): [description]
+        """
+        item_at_loc = self.game_board[xCoord][yCoord]
+        pass
+
+    def is_harvestable(self, xCoord: int, yCoord: int):
+        self.check_crop_age(xCoord=xCoord, yCoord=yCoord)
+        # check with the time it takes to harvest
+        crop_at_loc = self.get_crop_at_loc(xCoord=xCoord, yCoord=yCoord)
+        planted_timestamp = None
+        time_since_planted = None
+        if (time_since_planted == None):
+            pass
+        pass
+
+    def check_crop_age(self, xCoord: int, yCoord: int):
+        pass
+
+    def get_crop_at_loc(self, xCoord: int, yCoord: int):
+        pass
 
     # ---------------------
     # Create/Load/Save Game
@@ -241,7 +385,6 @@ class Game(object):
 
         if (operation_flag == 1):
             self.set_game_state(gameState=data)
-
             self.set_board(data["land"]["plots"])
             self.update_board_in_gamestate()
 
@@ -308,9 +451,61 @@ class Game(object):
     # Game Actions
     # ------------
 
-    def harvest(coordX: int, coordY: int):
+    def next_turn(self):
+        # Remember to reset curent turn usage
+        self.current_turn_day_usage = 0
+        pass
+
+    def harvest(self, coordX: int, coordY: int):
+        """
+        Harvests a crop at a given (x,y) coordinate
+
+        Args:
+            * coordX (`int`): x-coordinate on the board
+            * coordY (`int`): y-coordinate on the board
+        """
+        # Checks whether the plot is not empty
+        # Checks whether the crop can be harvested
+        # Changes the plot to empty
+        # Checks for player's land upgrade
+        # DAY: Update time taken to crop by dividing with productivity value
+        # Adds the crop to the warehouse multiplied by the yield 
+
         pass
 
     
-    def plant(coordX: int, coordY: int, plantType: str):
+    def plant(self, coordX: int, coordY: int, cropType: str):
+        """
+        Plants a crop at a given (x,y) coordinate
+
+        Args:
+            * coordX (`int`): x-coordinate on the board
+            * coordY (`int`): y-coordinate on the board
+            * cropType (`str`): The name of the crop to be planted
+        """
+        # Assumes that the cropType is valid. (Check done before calling this function)
+        # Check whether the plot is empty
+        # Check if the player can afford the crop
+        # If all the conditions are met, plant the crop at the board
+        # DAY: Update time taken to crop by dividing with productivity value
+        # Synchronise board and board in game_state
+        
+        pass
+
+    def purchase_upgrade(self, upgradeName: str):
+        # Assumes that the upgradeName is valid. (Check done before calling this function)
+        # Check if the player can afford the upgrade
+        # If condition is met, purcahse the upgrade
+        # Add count to the upgrade in game state
+        # Modify productivity parameter
+        # Modify maintainence parameter
+        pass
+
+    def sell_crop(self, cropName: str, quantity: int):
+        # Assumes that the cropName is valid. (Check done before calling this function)
+        # Check if the the crop quantity to be sold is enough
+
+        warehouse_items = self.get_warehouse_items()
+        # If not, don't do anything. Show error message
+        # If yes, reduce crop quantity. Increase player money by the qty * sell price
         pass
