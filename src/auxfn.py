@@ -13,7 +13,7 @@ def get_user_choice(displayText: str, returnType: str):
         * return_type (`str`): The target conversion.
 
     Returns:
-        * user_input (`str`, `bool`, `int`, `float`): The user's input converted to the target type as specified in `return_type`
+        * (`str`, `bool`, `int`, `float`): The user's input converted to the target type as specified in `return_type`
     """
 
     buffer = input(displayText)
@@ -39,10 +39,10 @@ def load_configuration(fileName):
     Returns the default variables in the specified json file as a dictionary
 
     Args:
-        fileName (`str`): The name of the configuraiton file without the file type suffix
+        * fileName (`str`): The name of the configuraiton file without the file type suffix
 
     Returns:
-        (`dict`): Configuration data as a dictionary
+        * (`dict`): Configuration data as a dictionary
     """
     import json
 
@@ -53,6 +53,21 @@ def load_configuration(fileName):
     f.close()
 
     return data_as_dict
+
+def convert_coord_input(coords: str):
+    """
+    Converts a string coordinate input in the form of `1,2` into corresponding integer coordinates
+
+    Args:
+        * coords (`str`): Coordinates as string in form of `1,2`
+
+    Returns:
+        * (`tuple`): (coord x, coord y)
+    """
+    coordinates_as_list = coords.split(",")
+    coord_x = int(coordinates_as_list[0])
+    coord_y = int(coordinates_as_list[1])
+    return coord_x, coord_y
 
 def settings():
     """

@@ -47,7 +47,7 @@ def get_start_menu():
     The text for start menu entered from the main menu
 
     Returns:
-        (`str`): Start menu as an F-String
+        * (`str`): Start menu as an F-String
     """
     
     output = """
@@ -67,7 +67,7 @@ def get_settings_menu():
     The text for settings menu entered from the main menu
 
     Returns:
-        (`str`): Settings menu as an F-String
+        * (`str`): Settings menu as an F-String
     """
 
     output = """
@@ -82,7 +82,7 @@ def get_game_menu():
     The text for game menu during the game loop
 
     Returns:
-        (`str`): Game menu as an F-String
+        * (`str`): Game menu as an F-String
     """
 
     output = """
@@ -97,7 +97,7 @@ def get_help_menu():
     The text for help menu during the game loop
 
     Returns:
-        (`str`): Help menu as an F-String
+        * (`str`): Help menu as an F-String
     """
     
     body = """

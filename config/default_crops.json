@@ -1,25 +1,30 @@
 {
     "corn": {
+        "abbreviation": "corn",
         "time": 80,
         "cost": 60,
         "climate": "normal"
     },
     "apple": {
+        "abbreviation": "appl",
         "time": 90,
         "cost": 65,
         "climate": "cold"
     },
     "cotton": {
+        "abbreviation": "cott",
         "time": 60,
         "cost": 50,
         "climate": "hot"
     },
-    "peanuts": {
+    "peanut": {
+        "abbreviation": "pnut",
         "time": 70,
         "cost": 20,
         "climate": "cold"
     },
     "pineapple": {
+        "abbreviation": "papp",
         "time": 1000,
         "cost": 20,
         "climate": "hot"

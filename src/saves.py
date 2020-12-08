@@ -17,8 +17,8 @@ def load_game(fileName):
     Returns:
         * If successful, returns a tuple with the following:
             * 1 (`int`): An integer to flag that the operation was successful
-            * gameState (`dict`): Game state as a dictionary
-        * If there's an error, returns a tuple with the following:
+            gameState (`dict`): Game state as a dictionary
+        * If error, returns a tuple with the following:
             * 0 (`int`): An integer to flag that the operation was unsuccessful
             * Error message (`str`): A custom error message
     """
@@ -50,7 +50,7 @@ def save_game(fileName, gameState):
         * If successful, returns a tuple with the following:
             * 1 (`int`): An integer to flag that the operation was successful
             * Success message (`str`): A custom success message with save location
-        * If there's an error, returns a tuple with the following:
+        * If error, returns a tuple with the following:
             * 0 (`int`): An integer to flag that the operation was unsuccessful
             * Error message (`str`): A custom error message
     """
